@@ -6,26 +6,27 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 
-public class Datum {
+public class DatumBuilder {
 	protected HashMap<String, Object> properties = new HashMap<>();
-	
-	protected DatumBuilder builder;
 
-	public Datum() {
+	public DatumBuilder() {
 	}
 
-	public Datum(Datum datum, String[] props) {
+	public static DatumBuilder from(DatumBuilder datum, String[] props) {
+		DatumBuilder newDatum = new DatumBuilder();
+		
 		for (String prop : props) {
-			build(prop, datum.get(prop));
+			newDatum.build(prop, datum.get(prop));
 		}
+		return newDatum;
 	}
 
-	public static Datum merge(List<? extends Datum> datumList, String[] props) throws RuntimeException {
+	public static DatumBuilder merge(List<? extends DatumBuilder> datumList, String[] props) throws RuntimeException {
 		if (datumList.size() == 0) {
 			throw new RuntimeException("empty datum list.");
 		}
 
-		Datum newDatum = new Datum();
+		DatumBuilder newDatum = new DatumBuilder();
 		for (String prop : props) {
 			newDatum.build(prop, datumList.get(0).get(prop));
 		}
@@ -43,7 +44,7 @@ public class Datum {
 
 		HashSet<String> ignoredProperties = new HashSet<>(Arrays.asList(props));
 
-		for (Datum d : datumList) {
+		for (DatumBuilder d : datumList) {
 			for (Entry<String, Object> e : d.getAllProperties().entrySet()) {
 				if (!ignoredProperties.contains(e.getKey())) {
 					newDatum.set(e.getKey(), e.getValue());
@@ -58,15 +59,15 @@ public class Datum {
 		properties.put(name, value);
 	}
 
-	public Datum build(String name, Object value) {
-		set(name, value);
-		return this;
-	}
-
 	public Object get(String name) {
 		return properties.get(name);
 	}
 
+	public DatumBuilder build(String name, Object value) {
+		set(name, value);
+		return this;
+	}
+	
 	public HashMap<String, Object> getAllProperties() {
 		return properties;
 	}
