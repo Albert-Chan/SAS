@@ -3,9 +3,10 @@ package data.pojo;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
-public class Data<T> {
+public class Data<T extends Datum> {
 	@SuppressWarnings("rawtypes")
 	public static final Data EMPTY = new Data();
 
@@ -28,29 +29,29 @@ public class Data<T> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Stream<List<T>> movingSplit(int window, int step) {
+	public Data<CompositedDatum<T>> movingSplit(int window, int step) {
 		if (data.size() < window) {
-			return ((Data<List<T>>) EMPTY).getStream();
+			return EMPTY;
 		}
 
-		List<List<T>> list = new ArrayList<>();
+		List<CompositedDatum<T>> list = new ArrayList<>();
 		for (int i = window - 1; i < data.size(); i++) {
-			List<T> windowData = new ArrayList<>();
+			//List<T> windowData = new ArrayList<>();
+			CompositedDatum<T> windowDatum = new CompositedDatum<>();
 			for (int j = i - (window - 1); j <= i; j++) {
-				windowData.add(data.get(j));
+				windowDatum.add(data.get(j));
 			}
-			list.add(windowData);
+			list.add(windowDatum);
 		}
-		return new Data<>(list).getStream();
+		return new Data<>(list);
 	}
 
-	// public <U> Data<U> collapsedMap(int window, int step, Function<List<T>,
-	// U> f) {
-	// List<U> result = new ArrayList<U>();
-	// for (List<T> l : movingSplit(window, step).getData()) {
-	// result.add(f.apply(l));
-	// }
-	// return new Data<>(result);
-	// }
+	public <U extends Datum> Data<U> collapsedMap(int window, int step, Function<CompositedDatum<T>, U> f) {
+		List<U> result = new ArrayList<U>();
+		for (CompositedDatum<T> l : movingSplit(window, step).getData()) {
+			result.add(f.apply(l));
+		}
+		return new Data<>(result);
+	}
 
 }

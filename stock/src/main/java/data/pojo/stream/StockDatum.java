@@ -1,4 +1,4 @@
-package data.pojo;
+package data.pojo.stream;
 
 public class StockDatum extends Datum {
 	public static final String ID = "id";
@@ -24,12 +24,6 @@ public class StockDatum extends Datum {
 
 	public String[] getKeyProperties() {
 		return KEY_PROPS;
-	}
-
-	@Override
-	public StockDatum build(String name, Object value) {
-		set(name, value);
-		return this;
 	}
 
 }
