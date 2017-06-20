@@ -36,7 +36,7 @@ public class StockDataTest {
 		Data<StockDatum> ma = data.MA("price", 5);
 		
 		System.out.println(ma);
-		
+		data.DI();
 		data.EMA("DI", 5);
 	}
 

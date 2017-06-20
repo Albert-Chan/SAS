@@ -22,7 +22,6 @@ public class StockData extends Data<StockDatum> {
 			newMA.set(MA_X, sum / avgPeriod);
 			return newMA;
 		});
-
 		return data;
 	}
 
@@ -43,12 +42,10 @@ public class StockData extends Data<StockDatum> {
 			StockDatum previous = l.get(0);
 			StockDatum today = l.get(1);
 
-			double previousAvgIndex = (double) previous.get(EMA_X);
+			double previousAvgIndex = (double) (previous.get(EMA_X) == null ? 0d : previous.get(EMA_X));
 			double todayAvgIndex = smoothRating * ((double) today.get(di) - previousAvgIndex) + previousAvgIndex;
-
-			StockDatum newEMA = new StockDatum(today, StockDatum.KEY_PROPS);
-			newEMA.set(EMA_X, todayAvgIndex);
-			return newEMA;
+			today.set(EMA_X, todayAvgIndex);			
+			return today;
 		});
 	}
 
