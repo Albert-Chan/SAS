@@ -19,7 +19,7 @@ public class Datum {
 		}
 	}
 	
-	public Datum build(String name, Object value) {
+	public Datum append(String name, Object value) {
 		set(name, value);
 		return this;
 	}

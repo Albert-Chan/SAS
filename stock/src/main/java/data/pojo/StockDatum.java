@@ -27,7 +27,7 @@ public class StockDatum extends Datum {
 	}
 
 	@Override
-	public StockDatum build(String name, Object value) {
+	public StockDatum append(String name, Object value) {
 		set(name, value);
 		return this;
 	}

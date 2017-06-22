@@ -29,14 +29,14 @@ public class Data<T extends Datum> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Data<CompositedDatum<T>> movingSplit(int window, int step) {
+	private Data<CompositedDatum<T>> movingSplit(int window, int step) {
 		if (data.size() < window) {
 			return EMPTY;
 		}
 
 		List<CompositedDatum<T>> list = new ArrayList<>();
-		for (int i = window - 1; i < data.size(); i++) {
-			//List<T> windowData = new ArrayList<>();
+		for (int i = window - 1; i < data.size(); i += step) {
+			// List<T> windowData = new ArrayList<>();
 			CompositedDatum<T> windowDatum = new CompositedDatum<>();
 			for (int j = i - (window - 1); j <= i; j++) {
 				windowDatum.add(data.get(j));
@@ -48,10 +48,23 @@ public class Data<T extends Datum> {
 
 	public <U extends Datum> Data<U> collapsedMap(int window, int step, Function<CompositedDatum<T>, U> f) {
 		List<U> result = new ArrayList<U>();
-		for (CompositedDatum<T> l : movingSplit(window, step).getData()) {
-			result.add(f.apply(l));
+		for (CompositedDatum<T> composited : movingSplit(window, step).getData()) {
+			result.add(f.apply(composited));
 		}
 		return new Data<>(result);
+	}
+	
+	public Data<T> minus(String minuend, String subtrahend, String resultName) {
+		data.forEach(d -> {
+			d.set(resultName, (double) d.get(minuend) - (double) d.get(subtrahend));
+		});
+		return this;
+	}
+	
+	
+
+	public String toString() {
+		return this.data.toString();
 	}
 
 }
