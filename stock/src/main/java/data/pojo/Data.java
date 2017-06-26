@@ -29,7 +29,7 @@ public class Data<T extends Datum> {
 	}
 
 	@SuppressWarnings("unchecked")
-	private Data<CompositedDatum<T>> movingSplit(int window, int step) {
+	public Data<CompositedDatum<T>> movingSplit(int window, int step) {
 		if (data.size() < window) {
 			return EMPTY;
 		}
