@@ -52,9 +52,9 @@ public class JrjCrawlerByDay {
 			}
 
 			String today = DATE_FORMAT_YMD.format(new Date());
-			File base1 = new File("E:/StockAnalysis/data/mx", today);
+			File base1 = new File("D:/StockAnalysis/data/mx", today);
 			doRun(base1);
-			File base2 = new File("E:/StockAnalysis/data/mx", today + "x");
+			File base2 = new File("D:/StockAnalysis/data/mx", today + "x");
 			doRun(base2);
 		}
 
@@ -79,7 +79,7 @@ public class JrjCrawlerByDay {
 				base.mkdir();
 			}
 			String baseDir = base.getAbsolutePath() + "\\";
-			String path = "E:/StockAnalysis/data/day";
+			String path = "D:/StockAnalysis/data/day";
 			File dir = new File(path);
 			if (!dir.isDirectory()) {
 				System.out.println(path + " is not a directory.");
