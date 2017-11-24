@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
-
+@ Deprecated
 public class BlogCrawler {
 	String last = null;
 	static SimpleDateFormat dateFormat = new SimpleDateFormat("HH_mm_ss");

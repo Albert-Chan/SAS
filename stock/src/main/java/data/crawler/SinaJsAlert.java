@@ -8,7 +8,7 @@ import java.util.HashMap;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
-public class SinajsCrawler {
+public class SinaJsAlert {
 
      public void crawle(String... stockIds) {
           StringBuffer sb = new StringBuffer();
@@ -56,15 +56,15 @@ public class SinajsCrawler {
                               float currentPrice = Float.parseFloat(datas[1]);
 
                               // the next line is for test.
-                              // alert("Âô³ö [" + stockId +"] " + stockName + "! \r\n" +
-                              // "µ±Ç°¼Û¸ñ£º" + currentPrice + "\r\n" + "´Ó×î¸ß¼Û" +highest
-                              // +"µøÂä");
+                              // alert("ï¿½ï¿½ï¿½ï¿½ [" + stockId +"] " + stockName + "! \r\n" +
+                              // "ï¿½ï¿½Ç°ï¿½Û¸ï¿½" + currentPrice + "\r\n" + "ï¿½ï¿½ï¿½ï¿½ß¼ï¿½" +highest
+                              // +"ï¿½ï¿½ï¿½ï¿½");
 
                               if (currentPrice < highest) {
                                    if (((highest - currentPrice) / highest) > 0.018) {
-                                        alert("Âô³ö [" + stockId + "] " + stockName
-                                                  + "! \r\n" + "µ±Ç°¼Û¸ñ£º" + currentPrice
-                                                  + "\r\n" + "´Ó×î¸ß¼Û" + highest + "µøÂä");
+                                        alert("ï¿½ï¿½ï¿½ï¿½ [" + stockId + "] " + stockName
+                                                  + "! \r\n" + "ï¿½ï¿½Ç°ï¿½Û¸ï¿½" + currentPrice
+                                                  + "\r\n" + "ï¿½ï¿½ï¿½ï¿½ß¼ï¿½" + highest + "ï¿½ï¿½ï¿½ï¿½");
                                    }
                               }
 
@@ -107,7 +107,7 @@ public class SinajsCrawler {
      }
 
      public static void main(String[] args) {
-          SinajsCrawler crawler = new SinajsCrawler();
+          SinaJsAlert crawler = new SinaJsAlert();
           crawler.crawle(args);
      }
 }

@@ -18,13 +18,11 @@ import data.RisingRateDataComparator;
 
 public class SinaRisingRateCrawler {
 	// The static logger
-	static protected Logger logger = Logger
-			.getLogger(SinaRisingRateCrawler.class.getName());
+	static protected Logger logger = Logger.getLogger(SinaRisingRateCrawler.class.getName());
 
 	// protected static final Logger logger = Logger.getAnonymousLogger();
 
-	protected static final SimpleDateFormat dateFormat = new SimpleDateFormat(
-			"yyyy-MM-dd");
+	protected static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	/**
 	 * ShangHai URL
@@ -39,39 +37,20 @@ public class SinaRisingRateCrawler {
 	private static final int MAX_CONNECTION = 16;
 
 	public static void main(String[] args) {
-
-		// FileHandler fileHandler = null;
-		// try {
-		// fileHandler = new FileHandler("%u.log ");
-		// } catch (SecurityException e1) {
-		// // TODO Auto-generated catch block
-		// e1.printStackTrace();
-		// } catch (IOException e1) {
-		// // TODO Auto-generated catch block
-		// e1.printStackTrace();
-		// }
-		// if (null != fileHandler) {
-		// fileHandler.setFormatter(new SimpleFormatter());
-		// logger.addHandler(fileHandler);
-		// }
-
 		try {
-			ExecutorService executor = Executors
-					.newFixedThreadPool(MAX_CONNECTION);
+			ExecutorService executor = Executors.newFixedThreadPool(MAX_CONNECTION);
 			while (true) {
 				ArrayList<RisingRateData> rank = new ArrayList<RisingRateData>();
 				rank.addAll(getRealTimeData(urlSH));
 				rank.addAll(getRealTimeData(urlSZ));
 				RisingRateData[] rankArray = new RisingRateData[0];
-				Arrays.sort(rankArray = rank.toArray(rankArray),
-						new RisingRateDataComparator());
+				Arrays.sort(rankArray = rank.toArray(rankArray), new RisingRateDataComparator());
 
 				// System.out.print( Arrays.deepToString( rankArray ) );
 
 				for (RisingRateData data : rankArray) {
 					String id = data.id;
-					executor.execute(new GetJrJFengShiStockInfoThread(id,
-							new SimplePostHandler()));
+					executor.execute(new SingleStockDetailedFetcher(id));
 
 					// FengShiStockInfo current =
 					// JrjCrawlerRealTime.getStockByID(id);
@@ -89,8 +68,7 @@ public class SinaRisingRateCrawler {
 		}
 	}
 
-	private static ArrayList<RisingRateData> getRealTimeData(String url)
-			throws Exception {
+	private static ArrayList<RisingRateData> getRealTimeData(String url) throws Exception {
 		String result = HttpConnection.getData(url, "gbk");
 		String jsonText = result.substring(result.indexOf('['));
 		JSONArray jsonArray = new JSONArray(jsonText);
@@ -105,16 +83,9 @@ public class SinaRisingRateCrawler {
 			String percent = arrayElement.getString("percent");
 			String dayPercent = arrayElement.getString("day_percent");
 
-			rank.add(new RisingRateData(id, name, Double.valueOf(percent),
-					Double.valueOf(dayPercent)));
+			rank.add(new RisingRateData(id, name, Double.valueOf(percent), Double.valueOf(dayPercent)));
 		}
 		return rank;
-	}
-
-	static class SimplePostHandler implements ICrawlerPostHandler {
-		public void handle(String stockId, ArrayList<JSONObject> array ){
-			
-		}
 	}
 
 }

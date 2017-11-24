@@ -20,4 +20,15 @@ public class HttpConnection {
 		}
 	}
 
+	public static String getData(String url, String charset, int tryNum) throws MultipleTryFailedException {
+		for (int i = 0; i < tryNum; i++) {
+			try {
+				return getData(url, charset);
+			} catch (IOException e) {
+				
+			}
+		}
+		throw new MultipleTryFailedException("");
+	}
+
 }

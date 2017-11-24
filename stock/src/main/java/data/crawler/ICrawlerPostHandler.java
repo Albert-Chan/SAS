@@ -1,9 +1,7 @@
 package data.crawler;
 
-import java.util.ArrayList;
-
-import org.json.JSONObject;
+import java.util.List;
 
 public interface ICrawlerPostHandler {
-	public void handle(String stockId, ArrayList<JSONObject> array ) throws Exception;
+	public void handle(String stockId, List<String> lines) throws HandlerException;
 }
