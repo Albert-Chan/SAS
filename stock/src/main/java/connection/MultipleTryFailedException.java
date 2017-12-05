@@ -7,4 +7,8 @@ public class MultipleTryFailedException extends Exception {
 	public MultipleTryFailedException(String msg) {
 		super(msg);
 	}
+
+	public MultipleTryFailedException(String message, Throwable cause) {
+		super(message, cause);
+	}
 }

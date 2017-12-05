@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import connection.HttpConnection;
+import connection.Requests;
 import data.RisingRateData;
 import data.RisingRateDataComparator;
 
@@ -69,7 +69,7 @@ public class SinaRisingRateCrawler {
 	}
 
 	private static ArrayList<RisingRateData> getRealTimeData(String url) throws Exception {
-		String result = HttpConnection.getData(url, "gbk");
+		String result = Requests.get(url, "gbk");
 		String jsonText = result.substring(result.indexOf('['));
 		JSONArray jsonArray = new JSONArray(jsonText);
 

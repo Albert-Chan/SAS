@@ -5,9 +5,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-public class HttpConnection {
 
-	public static String getData(String url, String charset) throws IOException {
+public class Requests {
+
+	public static String get(String url, String charset) throws IOException {
 		URL u = new URL(url);
 		try (InputStream in = u.openStream(); ByteArrayOutputStream out = new ByteArrayOutputStream();) {
 			int size;
@@ -20,15 +21,14 @@ public class HttpConnection {
 		}
 	}
 
-	public static String getData(String url, String charset, int tryNum) throws MultipleTryFailedException {
+	public static String get(String url, String charset, int tryNum) throws MultipleTryFailedException {
 		for (int i = 0; i < tryNum; i++) {
 			try {
-				return getData(url, charset);
+				return get(url, charset);
 			} catch (IOException e) {
-				
 			}
 		}
-		throw new MultipleTryFailedException("");
+		throw new MultipleTryFailedException("Failed after trying " + tryNum + " times.");
 	}
 
 }

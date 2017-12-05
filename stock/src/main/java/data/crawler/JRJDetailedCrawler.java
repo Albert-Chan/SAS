@@ -19,7 +19,7 @@ import com.dataminer.configuration.options.OptionsParser.OptionsParserBuildExcep
 import com.dataminer.configuration.options.ParsedOptions;
 import com.dataminer.constants.Constants;
 
-import connection.HttpConnection;
+import connection.Requests;
 import connection.MultipleTryFailedException;
 
 public class JRJDetailedCrawler {
@@ -30,7 +30,7 @@ public class JRJDetailedCrawler {
 	public static void main(String[] args) {
 		try {
 			LocalDate analyticDay = parseArgs(args).get("analyticDay");
-			File path = new File(BASE_PATH, analyticDay.format(DateTimeFormatter.ofPattern(Constants.YMD_FORMAT)));
+			File path = new File(BASE_PATH, DateTimeFormatter.ofPattern(Constants.YMD_FORMAT).format(analyticDay));
 			crawl(path);
 		} catch (Exception e) {
 			LOG.error(e.getMessage());
@@ -88,22 +88,27 @@ class SingleStockDetailedFetcher implements Runnable {
 	}
 
 	private void handleStock(String stockId) throws MultipleTryFailedException, JSONException, HandlerException {
-		String lastResponse = null;
+		List<String> lastResponse = null;
 		List<String> mergedContent = new ArrayList<>();
 		for (int pageIndex = 1;; pageIndex++) {
 			String url = String.format(URL_PATTERN, stockId, pageIndex);
 
-			String result = HttpConnection.getData(url, "gbk", MAX_TRY);
-			String detailData = result.substring(result.indexOf("{"));
-			if (detailData.equals(lastResponse)) {
+			LOG.debug(url);
+			
+			String result = Requests.get(url, "gb2312", MAX_TRY);
+			String data = result.substring(result.indexOf("{"));
+			List<String> datailDataList = parseAsJSON(data);
+
+			LOG.debug(datailDataList);
+
+			if (datailDataList.equals(lastResponse)) {
 				for (ICrawlerPostHandler handler : postHandlers) {
 					handler.handle(stockId, mergedContent);
 				}
 				return;
 			} else {
-				lastResponse = detailData;
-				List<String> stringifiedJSON = parseAsJSON(detailData);
-				mergedContent.addAll(stringifiedJSON);
+				lastResponse = datailDataList;
+				mergedContent.addAll(datailDataList);
 			}
 		}
 	}
